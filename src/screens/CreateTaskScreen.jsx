@@ -1,10 +1,6 @@
 // src/screens/CreateTaskScreen.js
 
-import {
-  View,
-  TextInput,
-  Button,
-} from "react-native";
+import { View, TextInput, Button } from "react-native";
 
 import { useState } from "react";
 
@@ -12,14 +8,15 @@ import { useDispatch } from "react-redux";
 
 import { addTask } from "../store/tasksSlice";
 
-export default function CreateTaskScreen({
-  navigation,
-}) {
+import {useAddTaskMutation} from "../store/tasksApi";
+
+export default function CreateTaskScreen({ navigation }) {
   const [title, setTitle] = useState("");
 
-  const dispatch = useDispatch();
+  /* const dispatch = useDispatch(); */
+  const [addTask] = useAddTaskMutation();
 
-  const saveTask = () => {
+  /* const saveTask = () => {
     if (!title.trim()) return;
 
     dispatch(
@@ -29,6 +26,17 @@ export default function CreateTaskScreen({
         completed: false,
       })
     );
+
+    navigation.goBack();
+  }; */
+
+  const saveTask = async () => {
+    if (!title.trim()) return;
+
+    await addTask({
+      title,
+      completed: false,
+    });
 
     navigation.goBack();
   };
@@ -51,10 +59,7 @@ export default function CreateTaskScreen({
         }}
       />
 
-      <Button
-        title="Guardar"
-        onPress={saveTask}
-      />
+      <Button title="Guardar" onPress={saveTask} />
     </View>
   );
 }
