@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
+  Alert
 } from "react-native";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -15,7 +16,11 @@ import TaskItem from "../components/TaskItem";
 
 import { toggleTask } from "../store/tasksSlice";
 
-import { useGetTasksQuery, useUpdateTaskMutation } from "../store/tasksApi";
+import {
+  useGetTasksQuery,
+  useUpdateTaskMutation,
+  useDeleteTaskMutation,
+} from "../store/tasksApi";
 
 export default function HomeScreen({ navigation }) {
   /* const tasks = useSelector(
@@ -26,6 +31,7 @@ export default function HomeScreen({ navigation }) {
   /* const dispatch = useDispatch(); */
 
   const [updateTask] = useUpdateTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation();
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
@@ -50,6 +56,19 @@ export default function HomeScreen({ navigation }) {
                   completed: !item.completed,
                 },
               })
+            }
+            onLongPress={() =>
+              Alert.alert("Eliminar tarea", `¿Eliminar "${item.title}"?`, [
+                {
+                  text: "Cancelar",
+                  style: "cancel",
+                },
+                {
+                  text: "Eliminar",
+                  style: "destructive",
+                  onPress: () => deleteTask(item.id),
+                },
+              ])
             }
           />
         )}

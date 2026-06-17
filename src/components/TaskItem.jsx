@@ -8,11 +8,13 @@ import {
 export default function TaskItem({
   task,
   onPress,
+  onLongPress,
 }) {
   return (
     <Pressable
       style={styles.container}
       onPress={onPress}
+      onLongPress={onLongPress}
     >
       <Text
         style={[
