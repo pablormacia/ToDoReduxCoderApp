@@ -8,13 +8,22 @@ import HomeScreen from "../screens/HomeScreen";
 import CreateTaskScreen from "../screens/CreateTaskScreen";
 import TaskCounter from "../components/TaskCounter";
 
-const Stack =
-  createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "#3B82F6",
+          },
+          headerTintColor: "#FFF",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      >
         <Stack.Screen
           name="Home"
           component={HomeScreen}

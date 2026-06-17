@@ -17,11 +17,12 @@ export default function TaskCounter() {
   return (
     <Text
       style={{
-        marginRight: 15,
+        marginRight: 12,
         fontWeight: "bold",
+        color: "#FFF",
       }}
     >
-      {pendingTasks}
+      Pendientes: {pendingTasks}
     </Text>
   );
 }
