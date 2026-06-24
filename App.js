@@ -21,26 +21,41 @@ import {
 
 function AppContent() {
   const dispatch = useDispatch();
-  // console.log(auth);
+
   useEffect(() => {
-    const unsubscribe =
-      onAuthStateChanged(
-        auth,
-        (user) => {
-          if (user) {
-    dispatch(
-      setUser({
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
-      })
-    );
-  } else {
-    dispatch(clearUser());
-  }
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      async (firebaseUser) => {
+        if (!firebaseUser) {
+          dispatch(clearUser());
+          return;
         }
-      );
+
+        try {
+          const res = await fetch(
+            `https://todoreduxcoderapp-default-rtdb.firebaseio.com/users/${firebaseUser.uid}.json`
+          );
+
+          const profile = await res.json();
+
+          dispatch(
+            setUser({
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              photoURL: profile?.photo || null,
+            })
+          );
+        } catch (err) {
+          dispatch(
+            setUser({
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              photoURL: null,
+            })
+          );
+        }
+      }
+    );
 
     return unsubscribe;
   }, []);

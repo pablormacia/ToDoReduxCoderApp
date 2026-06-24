@@ -5,6 +5,7 @@ import authReducer from "./authSlice";
 
 
 import { tasksApi } from "./tasksApi";
+import { userApi } from "./userApi";
 
 export const store = configureStore({
   reducer: {
@@ -13,10 +14,12 @@ export const store = configureStore({
 
     [tasksApi.reducerPath]:
       tasksApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
-      tasksApi.middleware
+      tasksApi.middleware,
+      userApi.middleware
     ),
 });
