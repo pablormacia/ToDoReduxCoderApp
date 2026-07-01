@@ -6,14 +6,18 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Switch
 } from "react-native";
 
 import { useState } from "react";
 
 import { useAddTaskMutation } from "../store/tasksApi";
 
+import {scheduleTaskNotification} from "../services/notificationService";
+
 export default function CreateTaskScreen({ navigation }) {
   const [title, setTitle] = useState("");
+  const [notify, setNotify] = useState(false);
 
   const [addTask] = useAddTaskMutation();
 
@@ -25,18 +29,18 @@ export default function CreateTaskScreen({ navigation }) {
       completed: false,
     });
 
+    if (notify) {
+      await scheduleTaskNotification(title);
+    }
+
     navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        Nueva tarea
-      </Text>
+      <Text style={styles.title}>Nueva tarea</Text>
 
-      <Text style={styles.label}>
-        Nombre de la tarea
-      </Text>
+      <Text style={styles.label}>Nombre de la tarea</Text>
 
       <TextInput
         placeholder="Ej: Estudiar RTK Query"
@@ -45,13 +49,15 @@ export default function CreateTaskScreen({ navigation }) {
         style={styles.input}
       />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={saveTask}
-      >
-        <Text style={styles.buttonText}>
-          Guardar tarea
-        </Text>
+      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 16 }}>
+        <Text style={styles.label}>Notificarme</Text>
+        <Switch value={notify} onValueChange={setNotify} />
+      </View>
+
+      
+
+      <TouchableOpacity style={styles.button} onPress={saveTask}>
+        <Text style={styles.buttonText}>Guardar tarea</Text>
       </TouchableOpacity>
     </View>
   );
